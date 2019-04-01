@@ -72,3 +72,6 @@ If you think this project is good, give a Star.
 
 [I have a question](https://github.com/Rvn0xsy/Cooolis-ms/issues)
 
+## LICENSE
+
+[GNU General Public License v3.0](https://github.com/Rvn0xsy/Cooolis-ms/blob/master/LICENSE)
