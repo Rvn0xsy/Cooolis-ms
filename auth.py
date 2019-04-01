@@ -11,7 +11,7 @@ def getToken(username,password):
     options = ["auth.login",username,password]
     options = msgpack.packb(options)
     headers = {"Content-type" : "binary/message-pack"}
-    url = 'https://127.0.0.1:55553/api/1.0/'
+    url = 'https://192.168.117.234:55553/api/1.0/'
     req  = requests.post(url,verify=False,headers=headers,data=options)
     res = dict(msgpack.unpackb(req.content))
     print(res)
@@ -29,11 +29,11 @@ options = ["module.execute","TEMPiq1G6w0Sy6gXLis5iBlTUwPqtmcZ","payload","window
 }]
 
 
-options = msgpack.packb(options)
-req  = requests.post(url,verify=False,headers=headers,data=options)
+# options = msgpack.packb(options)
+# req  = requests.post(url,verify=False,headers=headers,data=options)
 
-res = msgpack.unpackb(req.content)
-# res = res[b'payload'].decode()
-print(res)
+# res = msgpack.unpackb(req.content)
+# # res = res[b'payload'].decode()
+# print(res)
 
-# getToken("msf","msf")
+getToken("msf","msf")

