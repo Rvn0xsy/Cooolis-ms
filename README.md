@@ -5,6 +5,13 @@ Cooolis-ms 是一个支持Metasploit Framework RPC的一个服务端，用于给
 
 Cooolis-ms is a server that supports the Metasploit Framework RPC. It is used to work with the Shellcode and PE loader. To some extent, it bypasses the static killing of anti-virus software, and allows the Cooolis-ms server to communicate with the Metasploit server. Separation.
 
+## 你可以参考这里，写出自己的好项目
+
+- [静态恶意代码逃逸（第一课）](https://payloads.online/archivers/2019-11-10/1)
+- [静态恶意代码逃逸（第二课）](https://payloads.online/archivers/2019-11-10/2)
+- [静态恶意代码逃逸（第三课）](https://payloads.online/archivers/2019-11-10/3)
+- [静态恶意代码逃逸（第四课）](https://payloads.online/archivers/2019-11-10/4)
+- [静态恶意代码逃逸（第五课）](https://payloads.online/archivers/2019-11-10/5)
 
 [![Cooolis](http://img.youtube.com/vi/xMYZbvn53aY/0.jpg)](https://www.youtube.com/embed/xMYZbvn53aY "Cooolis")
 
