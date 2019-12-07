@@ -89,8 +89,6 @@ optional arguments:
 ## Cooolis-ms Loader
 
 
-![](./pic/demo.png)
-
 ```
 [*]Usage : Cooolis-ms.exe -p [PAYLOAD] -s [PAYLOAD OPTIONS] -H [Stager Host] -P [Stager Port]
          -p [PAYLOAD]    MSF PAYLOAD TYPE
