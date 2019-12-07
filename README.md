@@ -9,7 +9,7 @@ Cooolis-ms is a server that supports the Metasploit Framework RPC. It is used to
 
 - 体积小（>=100KB）
 - 支持Metasploit所有Payload
-- 支持Windows XP + / Windows 2003 +
+- ~支持Windows XP + / Windows 2003 +~
 - 参数设置方便
 - 单文件
 - 分离的
