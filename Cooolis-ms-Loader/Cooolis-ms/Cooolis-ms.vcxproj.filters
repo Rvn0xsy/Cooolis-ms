@@ -18,5 +18,16 @@
     <ClCompile Include="source.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="MemoryModule.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MemoryModule.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CLI11.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

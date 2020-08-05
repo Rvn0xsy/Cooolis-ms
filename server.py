@@ -78,7 +78,7 @@ class Metasploit_RPC(BaseRequestHandler):
         return msgpack.unpackb(pack_str)
 
     def __send_payload(self,payload,options):
-        print("[*]PAYLOAD: {payload}".format(payload=payload))
+        print("[*]PAYLOAD: {payload}, OPTIONS: {options}".format(payload=payload,options=options))
         pack_data = ["module.execute",self.token,"payload",payload,options]
         return self._request(pack_data)
 
