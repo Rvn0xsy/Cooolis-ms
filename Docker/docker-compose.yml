@@ -1,0 +1,8 @@
+version: '2'
+services:
+ cooolis-ms:
+   image: maxson/cooolis-ms:0.6
+   environment:
+    - CS_PORT=8899
+   ports:
+    - "8899:8899"
