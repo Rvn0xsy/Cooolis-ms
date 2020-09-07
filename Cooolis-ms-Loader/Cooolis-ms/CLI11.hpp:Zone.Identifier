@@ -1,4 +1,0 @@
-[ZoneTransfer]
-ZoneId=3
-ReferrerUrl=https://github.com/CLIUtils/CLI11/releases
-HostUrl=https://github-production-release-asset-2e65be.s3.amazonaws.com/80064252/25487200-b303-11ea-92fb-36086ef30e92?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20200805%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20200805T020912Z&X-Amz-Expires=300&X-Amz-Signature=e916713c2d44c2186cda966525e37817a90d395d8eca946baf5e45aea8aaec0b&X-Amz-SignedHeaders=host&actor_id=0&repo_id=80064252&response-content-disposition=attachment%3B%20filename%3DCLI11.hpp&response-content-type=application%2Foctet-stream
