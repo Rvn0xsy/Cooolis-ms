@@ -29,6 +29,19 @@ Cooolis-ms 是一个支持Metasploit Framework RPC的一个服务端，用于给
 
 ## 如何安装
 
+
+### Docker部署（推荐）
+
+```
+$ git clone https://github.com/Rvn0xsy/Cooolis-ms.git
+$ cd Cooolis-ms/Docker
+$ docker-compose up -d
+```
+
+默认映射监听端口：8899
+
+### 源码部署
+
 ```
 $ git clone https://github.com/Rvn0xsy/Cooolis-ms.git
 $ cd Cooolis-ms

