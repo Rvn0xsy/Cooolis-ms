@@ -29,10 +29,12 @@ jobs:
       run: msbuild /p:configuration=release /p:platform=x64 Cooolis-ms.vcxproj
       
     - name: pack x86 zip
+      working-directory: ./Cooolis-ms-Loader/Cooolis-ms
       shell: powershell
       run: Compress-Archive -Path "Release\Cooolis-ms.exe" -DestinationPath "C:\Cooolis-msX86.zip"
       
     - name: pack x64 zip
+      working-directory: ./Cooolis-ms-Loader/Cooolis-ms
       shell: powershell
       run: Compress-Archive -Path "x64\Release\Cooolis-ms.exe" -DestinationPath  "C:\Cooolis-msX64.zip"
       
