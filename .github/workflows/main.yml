@@ -33,8 +33,41 @@ jobs:
       
     - name: pack x86 zip
       shell: powershell
-      run: powershell Compress-7Zip "Release" -ArchiveFileName "Coolis-msX86.zip" -Format Zip
+      run: powershell Compress-7Zip "Release" -ArchiveFileName "Cooolis-msX86.zip" -Format Zip
       
     - name: pack x64 zip
       shell: powershell
-      run: powershell Compress-7Zip "Release" -ArchiveFileName "Cooolis-msX86.zip" -Format Zip
+      run: powershell Compress-7Zip "x64\Release" -ArchiveFileName "Cooolis-msX64.zip" -Format Zip
+      
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@latest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: |
+          Automated Release by GitHub Action CI
+        draft: false
+        prerelease: true
+    - name: Upload Release Asset (x64)
+      id: upload-release-asset-x64
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./Cooolis-msX64.zip
+        asset_name: Cooolis-msX64.zip
+        asset_content_type: application/zip
+    - name: Upload Release Asset (x86)
+      id: upload-release-asset-x86
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./Cooolis-msX86.zip
+        asset_name: Cooolis-msX86.zip
+        asset_content_type: application/zip
