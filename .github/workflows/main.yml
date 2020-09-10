@@ -27,17 +27,14 @@ jobs:
     - name: Compile x64 Program
       working-directory: ./Cooolis-ms-Loader/Cooolis-ms
       run: msbuild /p:configuration=release /p:platform=x64 Cooolis-ms.vcxproj
-    - name: Install 7Zip PowerShell Module
-      shell: powershell
-      run: Install-Module 7Zip4PowerShell -Force -Verbose
       
     - name: pack x86 zip
       shell: powershell
-      run: powershell Compress-7Zip "Release" -ArchiveFileName "C:\Cooolis-msX86.zip" -Format Zip
+      run: Compress-Archive -Path "Release\Cooolis-ms.exe" -DestinationPath "C:\Cooolis-msX86.zip"
       
     - name: pack x64 zip
       shell: powershell
-      run: powershell Compress-7Zip "x64\Release" -ArchiveFileName "C:\Cooolis-msX64.zip" -Format Zip
+      run: Compress-Archive -Path "x64\Release\Cooolis-ms.exe" -DestinationPath  "C:\Cooolis-msX64.zip"
       
     - name: Create Release
       id: create_release
