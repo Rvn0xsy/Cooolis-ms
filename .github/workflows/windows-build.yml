@@ -1,0 +1,23 @@
+# This is a basic workflow to help you get started with Actions
+
+name: WindowsBuild
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  pull_request:
+    branches: 
+      - master
+
+jobs:
+  BuildCooolis:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Enable Developer Command Prompt
+      uses: ilammy/msvc-dev-cmd@v1.2.0
+    
+    - name: Compile Program
+      working-directory: ./Cooolis-ms-Loader/Cooolis-ms
+      run: cl.exe /EHsc /GS /GL /analyze- /W3 /Gy /Zc:wchar_t /Zi /Gm- /O2 /Fd"Release\vc142.pdb" /Zc:inline /fp:precise /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_UNICODE" /D "UNICODE" /errorReport:prompt /WX- /Zc:forScope /Gd /Oy- /Oi /MT /FC /Fa"Release\" /EHsc /nologo /Fo"Release\" /Fp"Release\Cooolis-ms.pch" /diagnostics:column /I *.h *.cpp
