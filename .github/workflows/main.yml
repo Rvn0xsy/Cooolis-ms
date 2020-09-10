@@ -45,8 +45,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v1.1.2
-        release_name: Cooolis-ms Release v1.1.2
+        tag_name: v1.2
+        release_name: Cooolis-ms Release v1.2
         body: |
           Automated Release by GitHub Action CI
         draft: false
