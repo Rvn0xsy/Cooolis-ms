@@ -7,7 +7,7 @@ name: WindowsBuild
 on:
   pull_request:
     branches: 
-      - master
+      - dev
 
 jobs:
   BuildCooolis:
@@ -18,6 +18,22 @@ jobs:
     - name: Enable Developer Command Prompt
       uses: ilammy/msvc-dev-cmd@v1.2.0
     
-    - name: Compile Program
+    - name: Compile x86 Program
       working-directory: ./Cooolis-ms-Loader/Cooolis-ms
-      run: cl.exe /EHsc /GS /GL /I *.h *.cpp
+      run: msbuild /p:configuration=release /p:platform=x86 Cooolis-ms.vcxproj
+      
+    - name: Compile x64 Program
+      working-directory: ./Cooolis-ms-Loader/Cooolis-ms
+      run: msbuild /p:configuration=release /p:platform=x64 Cooolis-ms.vcxproj
+    - name: Install 7Zip PowerShell Module
+      shell: powershell
+      run: Install-Module 7Zip4PowerShell -Force -Verbose
+      
+    - name: packet x86 zip
+      shell: powershell
+      run: powershell Compress-7Zip "Release" -ArchiveFileName "Coolis-msX86.zip" -Format Zip
+      
+    - name: packet x64 zip
+      shell: powershell
+      run: powershell Compress-7Zip "Release" -ArchiveFileName "Cooolis-msX86.zip" -Format Zip
+      
