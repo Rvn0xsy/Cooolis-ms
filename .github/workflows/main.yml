@@ -33,11 +33,11 @@ jobs:
       
     - name: pack x86 zip
       shell: powershell
-      run: powershell Compress-7Zip "Release" -ArchiveFileName "Cooolis-msX86.zip" -Format Zip
+      run: powershell Compress-7Zip "Release" -ArchiveFileName "C:\Cooolis-msX86.zip" -Format Zip
       
     - name: pack x64 zip
       shell: powershell
-      run: powershell Compress-7Zip "x64\Release" -ArchiveFileName "Cooolis-msX64.zip" -Format Zip
+      run: powershell Compress-7Zip "x64\Release" -ArchiveFileName "C:\Cooolis-msX64.zip" -Format Zip
       
     - name: Create Release
       id: create_release
@@ -58,7 +58,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./Cooolis-ms-Loader/Cooolis-msX64.zip
+        asset_path: C:\Cooolis-msX64.zip
         asset_name: Cooolis-msX64.zip
         asset_content_type: application/zip
     - name: Upload Release Asset (x86)
@@ -68,6 +68,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./Cooolis-ms-Loader/Cooolis-msX86.zip
+        asset_path: C:\Cooolis-msX86.zip
         asset_name: Cooolis-msX86.zip
         asset_content_type: application/zip
