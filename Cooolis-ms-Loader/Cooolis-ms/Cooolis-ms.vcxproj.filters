@@ -21,12 +21,27 @@
     <ClCompile Include="MemoryModule.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Cooolis-ExternalC2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Cooolis-msf.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MemoryModule.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="CLI11.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Cooolis-ExternalC2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Cooolis-msf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="rang.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
