@@ -5,6 +5,7 @@
 #define PAYLOAD_MAX_SIZE 512 * 1024
 #define BUFFER_MAX_SIZE 1024 * 1024
 
+
 class CCooolisExternalC2 {
 
 private:
