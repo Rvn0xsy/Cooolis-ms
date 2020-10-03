@@ -27,6 +27,12 @@
     <ClCompile Include="Cooolis-msf.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Cooolis-Http.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Cooolis-Reflective.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MemoryModule.h">
@@ -42,6 +48,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="rang.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Cooolis-Http.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Cooolis-Reflective.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
