@@ -60,9 +60,9 @@ Options:
 
 ### 子命令使用详解
 
-- [metasploit](module-metasploit)
-- [cobaltstrike](module-cobaltstrike)
-- [reflective](module-reflective)
+- [metasploit](https://github.com/Rvn0xsy/Cooolis-ms/wiki/module-metasploit)
+- [cobaltstrike](https://github.com/Rvn0xsy/Cooolis-ms/wiki/module-cobaltstrike)
+- [reflective](https://github.com/Rvn0xsy/Cooolis-ms/wiki/module-reflective)
 
 
 
