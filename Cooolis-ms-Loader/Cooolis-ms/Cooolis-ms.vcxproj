@@ -171,6 +171,7 @@
     <ClCompile Include="Cooolis-Http.cpp" />
     <ClCompile Include="Cooolis-msf.cpp" />
     <ClCompile Include="Cooolis-Reflective.cpp" />
+    <ClCompile Include="Cooolis-Shellcode.cpp" />
     <ClCompile Include="MemoryModule.cpp" />
     <ClCompile Include="source.cpp" />
   </ItemGroup>
@@ -180,6 +181,7 @@
     <ClInclude Include="Cooolis-Http.h" />
     <ClInclude Include="Cooolis-msf.h" />
     <ClInclude Include="Cooolis-Reflective.h" />
+    <ClInclude Include="Cooolis-Shellcode.h" />
     <ClInclude Include="MemoryModule.h" />
     <ClInclude Include="rang.hpp" />
   </ItemGroup>

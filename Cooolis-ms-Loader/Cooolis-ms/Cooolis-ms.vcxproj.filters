@@ -33,6 +33,9 @@
     <ClCompile Include="Cooolis-Reflective.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Cooolis-Shellcode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MemoryModule.h">
@@ -54,6 +57,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Cooolis-Reflective.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Cooolis-Shellcode.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
