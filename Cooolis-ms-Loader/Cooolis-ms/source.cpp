@@ -154,7 +154,7 @@ int main(int argc, char** argv)
 			return FALSE;
 		}
 		CooolisShellcode->ConvertShellcodeByCHAR(dwFileSize);
-		CooolisShellcode->CreateThreadRun();
+		CooolisShellcode->CreateThreadRun(); // ¥””Õ≤€∂¡»°
 		delete CooolisShellcode;
 		return TRUE;
 	});
