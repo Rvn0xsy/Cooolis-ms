@@ -4,10 +4,13 @@
 #include <string>
 #include <map>
 #include <array>
-
+#include "Kernel32-Import.h"
 
 #define SHELLCODE_MAP_LEN 256
-
+extern ImportCreateThread CooolisCreateThread;
+extern ImportVirtualProtect CooolisVirtualProtect;
+extern ImportVirtualProtectEx CooolisVirtualProtectEx;
+extern ImportVirtualAlloc CooolisVirtualAlloc;
 
 
 class CCooolisShellcode {

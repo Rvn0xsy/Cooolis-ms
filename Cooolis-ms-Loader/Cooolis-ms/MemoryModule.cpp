@@ -1,29 +1,4 @@
-﻿/*
- * Memory DLL loading code
- * Version 0.0.3
- *
- * Copyright (c) 2004-2012 by Joachim Bauch / mail@joachim-bauch.de
- * http://www.joachim-bauch.de
- *
- * The contents of this file are subject to the Mozilla Public License Version
- * 1.1 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS" basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- * for the specific language governing rights and limitations under the
- * License.
- *
- * The Original Code is MemoryModule.c
- *
- * The Initial Developer of the Original Code is Joachim Bauch.
- *
- * Portions created by Joachim Bauch are Copyright (C) 2004-2012
- * Joachim Bauch. All Rights Reserved.
- *
- */
-
+﻿
 #ifndef __GNUC__
  // disable warnings about pointer <-> DWORD conversions
 #pragma warning( disable : 4311 4312 )
@@ -51,6 +26,8 @@
 #endif
 
 #include "MemoryModule.h"
+
+
 
 typedef struct {
 	PIMAGE_NT_HEADERS headers;
@@ -92,7 +69,7 @@ static void CopySections(const unsigned char* data, PIMAGE_NT_HEADERS old_header
 			// uninitialized data
 			size = old_headers->OptionalHeader.SectionAlignment;
 			if (size > 0) {
-				dest = (unsigned char*)VirtualAlloc(codeBase + section->VirtualAddress,
+				dest = (unsigned char*)CooolisVirtualAlloc(codeBase + section->VirtualAddress,
 					size,
 					MEM_COMMIT,
 					PAGE_READWRITE);
@@ -106,7 +83,7 @@ static void CopySections(const unsigned char* data, PIMAGE_NT_HEADERS old_header
 		}
 
 		// commit memory block and copy data from dll
-		dest = (unsigned char*)VirtualAlloc(codeBase + section->VirtualAddress,
+		dest = (unsigned char*)CooolisVirtualAlloc(codeBase + section->VirtualAddress,
 			section->SizeOfRawData,
 			MEM_COMMIT,
 			PAGE_READWRITE);
@@ -115,10 +92,6 @@ static void CopySections(const unsigned char* data, PIMAGE_NT_HEADERS old_header
 	}
 }
 
-// �˴�3ά����Ķ���Ƚ��������Executable, Readable, Writeable�����������
-// ���FinalizeSections�����ж���������ʹ��
-//
-// Protection flags for memory pages (Executable, Readable, Writeable)
 static int ProtectionFlags[2][2][2] = {
 	{
 		// not executable
@@ -173,7 +146,7 @@ static void FinalizeSections(PMEMORYMODULE module)
 
 		if (size > 0) {
 			// change memory access flags
-			if (VirtualProtect((LPVOID)((POINTER_TYPE)section->Misc.PhysicalAddress | imageOffset), size, protect, &oldProtect) == 0)
+			if (CooolisVirtualProtect((LPVOID)((POINTER_TYPE)section->Misc.PhysicalAddress | imageOffset), size, protect, &oldProtect) == 0)
 #ifdef DEBUG_OUTPUT
 				OutputLastError("Error protecting memory page")
 #endif
@@ -302,14 +275,13 @@ static int BuildImportTable(PMEMORYMODULE module)
 HMEMORYMODULE MemoryLoadLibrary(const void* data)
 {
 	PMEMORYMODULE result;
-	PIMAGE_DOS_HEADER dos_header; // DOSͷ
-	PIMAGE_NT_HEADERS old_header; // PEͷ
+	PIMAGE_DOS_HEADER dos_header; 
+	PIMAGE_NT_HEADERS old_header;
 	unsigned char* code, * headers;
 	SIZE_T locationDelta;
 	DllEntryProc DllEntry;
 	BOOL successfull;
 
-	// ��ȡDOSͷָ�룬�����DOSͷ
 	dos_header = (PIMAGE_DOS_HEADER)data;
 	if (dos_header->e_magic != IMAGE_DOS_SIGNATURE) {
 #if DEBUG_OUTPUT
@@ -318,7 +290,6 @@ HMEMORYMODULE MemoryLoadLibrary(const void* data)
 		return NULL;
 	}
 
-	// ��ȡPEͷָ�룬�����PEͷ
 	old_header = (PIMAGE_NT_HEADERS) & ((const unsigned char*)(data))[dos_header->e_lfanew];
 	if (old_header->Signature != IMAGE_NT_SIGNATURE) {
 #if DEBUG_OUTPUT
@@ -327,15 +298,15 @@ HMEMORYMODULE MemoryLoadLibrary(const void* data)
 		return NULL;
 	}
 
-	// ��"PEHeader.OptionalHeader.ImageBase"��Ԥ��"PEHeader.OptionalHeader.SizeOfImage"�ֽڵĿռ�
-	code = (unsigned char*)VirtualAlloc((LPVOID)(old_header->OptionalHeader.ImageBase),
+	
+	code = (unsigned char*)CooolisVirtualAlloc((LPVOID)(old_header->OptionalHeader.ImageBase),
 		old_header->OptionalHeader.SizeOfImage,
 		MEM_RESERVE,
 		PAGE_READWRITE);
 
 	if (code == NULL) {
-		// try to allocate memory at arbitrary position
-		code = (unsigned char*)VirtualAlloc(NULL,
+		
+		code = (unsigned char*)CooolisVirtualAlloc(NULL,
 			old_header->OptionalHeader.SizeOfImage,
 			MEM_RESERVE,
 			PAGE_READWRITE);
@@ -347,8 +318,7 @@ HMEMORYMODULE MemoryLoadLibrary(const void* data)
 		}
 	}
 
-	// �ڽ��̵�Ĭ�϶��Ϸ���"sizeof(MEMORYMODULE)"�ֽڵĿռ����ڴ��MEMORYMODULE�ṹ��
-	// ���㺯��ĩβ���ýṹ��ָ�뵱������ֵ����
+	
 	result = (PMEMORYMODULE)HeapAlloc(GetProcessHeap(), 0, sizeof(MEMORYMODULE));
 	result->codeBase = code;
 	result->numModules = 0;
@@ -356,48 +326,38 @@ HMEMORYMODULE MemoryLoadLibrary(const void* data)
 	result->initialized = 0;
 
 
-	// һ���Դ�code��ַ��������ӳ��������ڴ����򶼷���
-	VirtualAlloc(code,
+	CooolisVirtualAlloc(code,
 		old_header->OptionalHeader.SizeOfImage,
 		MEM_COMMIT,
 		PAGE_READWRITE);
 
-	// ԭ���ߵĴ����д˴����ٴε���VirtualAlloc��code������SizeOfHeaders��С���ڴ棬
-	// ���ⲽ�������ڶ���ģ���Ϊ��һ���Ѿ���code������������������ڴ������ˣ�
-	// ����ֱ�ӽ��˴�����Ϊ headers = code;
-	//
-	//headers = (unsigned char *)VirtualAllocEx(process, code,
-	//	old_header->OptionalHeader.SizeOfHeaders,
-	//	MEM_COMMIT,
-	//	PAGE_READWRITE);
 	headers = code;
 
-	// ����DOSͷ + DOS STUB + PEͷ��headers��ַ��
+	
 	memcpy(headers, dos_header, dos_header->e_lfanew + old_header->OptionalHeader.SizeOfHeaders);
 	result->headers = (PIMAGE_NT_HEADERS) & ((const unsigned char*)(headers))[dos_header->e_lfanew];
 
-	// ����"MEMORYMODULE.PIMAGE_NT_HEADERS"�ṹ���еĻ���ַ
+	
 	result->headers->OptionalHeader.ImageBase = (POINTER_TYPE)code;
 
-	// ��dll�ļ������п���ÿ��section���ڣ������ݵ��µ��ڴ�����
+	
 	CopySections((const unsigned char*)data, old_header, result);
 
-	// �����ص����̵�ַ�ռ��λ�ú�֮ǰPE�ļ���ָ���Ļ���ַ�Ƿ�һ�£������һ�£�����Ҫ�ض�λ
+	
 	locationDelta = (SIZE_T)(code - old_header->OptionalHeader.ImageBase);
 	if (locationDelta != 0) {
 		PerformBaseRelocation(result, locationDelta);
 	}
 
-	// ��������dll��������"PEHeader.OptionalHeader.DataDirectory.Image_directory_entry_import"�����
+	
 	if (!BuildImportTable(result)) {
 		goto error;
 	}
 
-	// ����ÿ��Section��"PEHeader.Image_Section_Table.Characteristics"�����������ڴ�ҳ�ķ������ԣ�
-	// ���������Ϊ"discardable"���ԣ����ͷŸ��ڴ�ҳ
+	
 	FinalizeSections(result);
 
-	// ��ȡDLL����ں���ָ�룬������
+	
 	if (result->headers->OptionalHeader.AddressOfEntryPoint != 0) {
 		DllEntry = (DllEntryProc)(code + result->headers->OptionalHeader.AddressOfEntryPoint);
 		if (DllEntry == 0) {

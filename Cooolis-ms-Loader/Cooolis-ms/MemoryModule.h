@@ -6,7 +6,14 @@
 
 #include <Windows.h>
 
+#include "Kernel32-Import.h"
+
+extern ImportCreateThread CooolisCreateThread;
+extern ImportVirtualProtect CooolisVirtualProtect;
+extern ImportVirtualProtectEx CooolisVirtualProtectEx;
+extern ImportVirtualAlloc CooolisVirtualAlloc;
 typedef void* HMEMORYMODULE;
+
 
 #ifdef __cplusplus
 extern "C" {

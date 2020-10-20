@@ -32,12 +32,22 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <iostream>
+#include "Kernel32-Import.h"
+
+extern ImportCreateThread CooolisCreateThread;
+extern ImportVirtualProtect CooolisVirtualProtect;
+extern ImportVirtualProtectEx CooolisVirtualProtectEx;
+extern ImportVirtualAlloc CooolisVirtualAlloc;
+extern ImportVirtualAllocEx CooolisVirtualAllocEx;
+extern ImportCreateRemoteThread CooolisCreateRemoteThread;
+extern ImportAdjustTokenPrivileges CooolisAdjustTokenPrivileges;
 // we declare some common stuff in here...
+
 
 #define DLL_METASPLOIT_ATTACH	4
 #define DLL_METASPLOIT_DETACH	5
 #define DLL_QUERY_HMODULE		6
-
+#define REFLECTIVED_EXPORT_NAME "ReflectiveLoader"
 #define DEREF( name )*(UINT_PTR *)(name)
 #define DEREF_64( name )*(DWORD64 *)(name)
 #define DEREF_32( name )*(DWORD *)(name)

