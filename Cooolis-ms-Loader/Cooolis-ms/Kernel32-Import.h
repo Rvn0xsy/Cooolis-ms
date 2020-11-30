@@ -62,6 +62,17 @@ typedef BOOL (WINAPI * ImportAdjustTokenPrivileges)(
 	PDWORD            ReturnLength
 );
 
+typedef HANDLE (WINAPI * ImportHeapCreate)(
+	 DWORD flOptions,
+	 SIZE_T dwInitialSize,
+	 SIZE_T dwMaximumSize
+);
+
+typedef LPVOID (WINAPI * ImportHeapAlloc)(
+	HANDLE hHeap,
+	DWORD  dwFlags,
+	SIZE_T dwBytes
+);
 
 extern ImportCreateThread CooolisCreateThread;
 extern ImportVirtualProtect CooolisVirtualProtect;

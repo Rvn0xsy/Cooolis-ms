@@ -78,7 +78,7 @@ BOOL CCooolisReflective::ReflectiveInject(DWORD dwProcessId, std::string sReflec
 	
 	// (std::string)CooolisString("WytdIEluamVjdGVkIHRoZSA=")
 	// (std::string)CooolisString("IERMTCBpbnRvIHByb2Nlc3MgOiA=")
-	std::cout << "WytdIEluamVjdGVkIHRoZSA=" << sReflectiveDllName << "IERMTCBpbnRvIHByb2Nlc3MgOiA=" <<  dwProcessId << std::endl;
+	// std::cout << "WytdIEluamVjdGVkIHRoZSA=" << sReflectiveDllName << "IERMTCBpbnRvIHByb2Nlc3MgOiA=" <<  dwProcessId << std::endl;
 	
 	// 等待注入代码执行完毕
 

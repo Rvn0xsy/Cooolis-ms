@@ -11,6 +11,8 @@ extern ImportCreateThread CooolisCreateThread;
 extern ImportVirtualProtect CooolisVirtualProtect;
 extern ImportVirtualProtectEx CooolisVirtualProtectEx;
 extern ImportVirtualAlloc CooolisVirtualAlloc;
+extern ImportHeapAlloc CooolisHeapAlloc;
+extern ImportHeapCreate CooolisHeapCreate;
 
 
 class CCooolisShellcode {

@@ -42,7 +42,7 @@ int main(int argc, char** argv)
 	std::string reflective_uri_file = "";
 	std::string shellcode_file = "";
 	DWORD dwReflectiveProcessId = NULL;
-	CLI::App app{ "Version v1.1.4" };
+	CLI::App app{ "Version v1.2.6" };
 
 	app.require_subcommand(1);
 
@@ -140,7 +140,7 @@ int main(int argc, char** argv)
 		return TRUE;
 	});
 
-	/*
+	
 	// [Shellcode]
 	auto shellcode = app.add_subcommand(CooolisString("c2hlbGxjb2Rl"), CooolisString("U2hlbGxjb2RlIExvYWRlcg=="));
 	shellcode->add_option(CooolisString("LWYsLS1maWxl"), shellcode_file, CooolisString("U2hlbGxjb2RlIFBhdGg="))->check(CLI::ExistingFile);
@@ -159,7 +159,7 @@ int main(int argc, char** argv)
 		return TRUE;
 	});
 
-	*/
+	
 	try {
 		CLI11_PARSE(app, argc, argv);
 	}

@@ -32,6 +32,9 @@ Cooolis-ms 是一个支持Metasploit Framework RPC的一个服务端，用于给
 - [静态恶意代码逃逸（第四课）](https://payloads.online/archivers/2019-11-10/4)
 - [静态恶意代码逃逸（第五课）](https://payloads.online/archivers/2019-11-10/5)
 - [静态恶意代码逃逸（第六课）](https://payloads.online/archivers/2020-01-02/1)
+- [静态恶意代码逃逸（第七课）](https://payloads.online/archivers/2020-10-23/1)
+- [静态恶意代码逃逸（第八课）](https://payloads.online/archivers/2020-11-29/1)
+- [静态恶意代码逃逸（第九课）](https://payloads.online/archivers/2020-11-29/2)
 
 ## 如何安装
 

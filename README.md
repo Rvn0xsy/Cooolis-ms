@@ -28,7 +28,7 @@
 
 ```
 [~\Documents\Cooolis-ms\Cooolis-ms-Loader\Release]> .\Cooolis-ms.exe -h
-Version v1.1.4
+Version v1.2.6
 Usage: C:\Users\Administrator\Documents\Cooolis-ms\Cooolis-ms-Loader\Release\Cooolis-ms.exe [OPTIONS] SUBCOMMAND
 
 Options:
@@ -38,6 +38,7 @@ Subcommands:
   metasploit                  Metasploit RPC Loader
   cobaltstrike                Cobalt Strike External C2 Loader
   reflective                  Reflective DLL injection
+  shellcode                   Shellcode Loader
 ```
 
 通过在子命令后添加`-h/--help`获取子命令对应的详细参数：
@@ -63,7 +64,7 @@ Options:
 - [metasploit](https://github.com/Rvn0xsy/Cooolis-ms/wiki/module-metasploit)
 - [cobaltstrike](https://github.com/Rvn0xsy/Cooolis-ms/wiki/module-cobaltstrike)
 - [reflective](https://github.com/Rvn0xsy/Cooolis-ms/wiki/module-reflective)
-
+- [shellcode](https://github.com/Rvn0xsy/Cooolis-ms/wiki/module-shellcode)
 
 
 ### 学习与扩展
@@ -76,6 +77,10 @@ Options:
 - [静态恶意代码逃逸（第四课）](https://payloads.online/archivers/2019-11-10/4)
 - [静态恶意代码逃逸（第五课）](https://payloads.online/archivers/2019-11-10/5)
 - [静态恶意代码逃逸（第六课）](https://payloads.online/archivers/2020-01-02/1)
+- [静态恶意代码逃逸（第七课）](https://payloads.online/archivers/2020-10-23/1)
+- [静态恶意代码逃逸（第八课）](https://payloads.online/archivers/2020-11-29/1)
+- [静态恶意代码逃逸（第九课）](https://payloads.online/archivers/2020-11-29/2)
+
 
 ## 关于其他
 

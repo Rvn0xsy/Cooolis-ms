@@ -8,3 +8,5 @@ ImportVirtualAlloc CooolisVirtualAlloc = (ImportVirtualAlloc)GetProcAddress(GetM
 ImportVirtualAllocEx CooolisVirtualAllocEx = (ImportVirtualAllocEx)GetProcAddress(GetModuleHandleW(L"kernel32.dll"), "VirtualAllocEx");
 ImportCreateRemoteThread CooolisCreateRemoteThread = (ImportCreateRemoteThread)GetProcAddress(GetModuleHandleW(L"kernel32.dll"), "CreateRemoteThread");
 ImportAdjustTokenPrivileges CooolisAdjustTokenPrivileges = (ImportAdjustTokenPrivileges)GetProcAddress(GetModuleHandleW(L"Advapi32.dll"), "AdjustTokenPrivileges");
+ImportHeapCreate CooolisHeapCreate = (ImportHeapCreate)GetProcAddress(GetModuleHandleW(L"kernel32.dll"), "HeapCreate");
+ImportHeapAlloc CooolisHeapAlloc = (ImportHeapAlloc)GetProcAddress(GetModuleHandleW(L"kernel32.dll"), "HeapAlloc");
