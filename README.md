@@ -90,12 +90,3 @@ Options:
 
 [GNU General Public License v3.0](https://github.com/Rvn0xsy/Cooolis-ms/blob/master/LICENSE)
 
-
-
-## issue
-
-[I want to submit a suggestion or question](https://github.com/Rvn0xsy/Cooolis-ms/issues)
-
-## LICENSE
-
-[GNU General Public License v3.0](https://github.com/Rvn0xsy/Cooolis-ms/blob/master/LICENSE)
